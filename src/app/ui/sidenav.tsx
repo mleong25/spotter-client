@@ -1,7 +1,6 @@
 import Link from 'next/link';
-import NavLinks from '@/app/ui/dashboard/nav-links';
-import { Logout } from '@mui/icons-material';
-import { Icon } from '@mui/material';
+import NavLinks from '@/app/ui/nav-links';
+import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/16/solid';
 
 export default function SideNav() {
   return (
@@ -19,7 +18,7 @@ export default function SideNav() {
         <div className="hidden h-auto w-full grow rounded-md bg-zinc-950 md:block"></div>
         <form>
           <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-zinc-950 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
-            <Icon className="hover:text-blue-600" component={Logout} fontSize="medium"></Icon>
+            <ArrowRightStartOnRectangleIcon className="w-6"></ArrowRightStartOnRectangleIcon>
             <div className="hidden md:block">Sign Out</div>
           </button>
         </form>
