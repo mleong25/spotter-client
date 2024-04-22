@@ -9,6 +9,11 @@ const clientSchema = new Schema(
     lastName: String,
     dob: Date,
     email: String,
+    height: {
+      ft: Number,
+      in: Number,
+    },
+    weight: Number,
   },
   {
     timestamps: true,
