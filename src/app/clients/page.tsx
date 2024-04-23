@@ -67,7 +67,7 @@ export default function Page() {
       )}
 
       {clients.length && !loading && (
-        <div className='inline-grid auto-rows-max grid-cols-1 mx-2 my-6 container m-auto size-full gap-6 md:grid-cols-3'>
+        <div className='inline-grid auto-rows-max grid-cols-1 my-6 container m-auto size-full gap-x-4 gap-y-5 md:grid-cols-3 lg:grid-cols-4'>
           {clients.map((c: any) => {
             return (
               <ClientCard
