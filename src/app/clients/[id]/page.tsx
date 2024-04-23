@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 const getClientById = async (id: any) => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/backend/api/Clients/${id}`,
+    `/backend/api/Clients/${id}`,
     {
       cache: 'no-store',
     }
@@ -19,22 +19,28 @@ const getClientById = async (id: any) => {
   return res.json();
 };
 
+const deleteClient = async (id: any) => {
+  const res = await fetch(
+    `/backend/api/Clients/${id}`,
+    {
+      method: 'DELETE',
+    }
+  );
+  return res;
+};
+
 const ClientPage = async ({ params }: any) => {
   const router = useRouter();
+
   const { client } = await getClientById(params.id);
 
-  const deleteClient = async (id: any) => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/backend/api/Clients/${id}`,
-      {
-        method: 'DELETE',
-      }
-    );
+  const handleDelete = async () => {
+    const res = await deleteClient(params.id);
 
     if (res.ok) {
       router.replace('/clients');
     }
-  };
+  }
 
   return (
     <>
@@ -42,7 +48,7 @@ const ClientPage = async ({ params }: any) => {
         <ClientDisplay client={client} />
         <TrashIcon
           className='size-6 text-red-500 cursor-pointer'
-          onClick={() => deleteClient(params.id)}
+          onClick={handleDelete}
         />
       </div>
     </>
