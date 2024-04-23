@@ -5,9 +5,12 @@ import { TrashIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 
 const getClientById = async (id: any) => {
-  const res = await fetch(`http://localhost:3000/backend/api/Clients/${id}`, {
-    cache: 'no-store',
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/backend/api/Clients/${id}`,
+    {
+      cache: 'no-store',
+    }
+  );
 
   if (!res.ok) {
     throw new Error('Failed to get client.');
@@ -21,10 +24,12 @@ const ClientPage = async ({ params }: any) => {
   const { client } = await getClientById(params.id);
 
   const deleteClient = async (id: any) => {
-    console.log('deleting: ', id);
-    const res = await fetch(`http://localhost:3000/backend/api/Clients/${id}`, {
-      method: 'DELETE',
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/backend/api/Clients/${id}`,
+      {
+        method: 'DELETE',
+      }
+    );
 
     if (res.ok) {
       router.replace('/clients');

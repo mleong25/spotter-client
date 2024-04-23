@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
 const ClientForm = (props: any) => {
@@ -25,12 +25,15 @@ const ClientForm = (props: any) => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    const res = await fetch('backend/api/Clients', {
-      method: 'POST',
-      body: JSON.stringify({ clientFormData }),
-      //@ts-ignore
-      'Content-Type': 'application/json',
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/backend/api/Clients`,
+      {
+        method: 'POST',
+        body: JSON.stringify({ clientFormData }),
+        //@ts-ignore
+        'Content-Type': 'application/json',
+      }
+    );
 
     if (!res.ok) {
       throw new Error('Failed to create Client.');

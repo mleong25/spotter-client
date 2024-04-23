@@ -18,7 +18,10 @@ export default function Page() {
 
   const getClients = async () => {
     try {
-      const res = await fetch('backend/api/Clients', {});
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/backend/api/Clients`,
+        {}
+      );
 
       if (!res.ok) {
         throw new Error('Failed to fetch clients.');
