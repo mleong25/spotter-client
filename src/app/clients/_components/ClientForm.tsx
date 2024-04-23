@@ -64,7 +64,7 @@ const ClientForm = (props: any) => {
   const [clientFormData, setClientFormData] = useState(clientData);
 
   return (
-    <div className='flex flex-col container rounded absolute w-1/2 top-1/4 shadow-md'>
+    <div className='flex flex-col container rounded absolute w-3/4 md:w-1/2 top-[10%] shadow-md inset-x-0 md:inset-x-auto'>
       <div className='relative border bg-black rounded-xl p-4'>
         <XMarkIcon
           onClick={closeForm}
