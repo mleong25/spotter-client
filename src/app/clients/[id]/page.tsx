@@ -51,6 +51,7 @@ const ClientPage = async ({ params }: any) => {
           onClick={handleDelete}
         />
       </div>
+      <div className='flex justify-center container mt-5'>Campaign</div>
     </>
   );
 };
