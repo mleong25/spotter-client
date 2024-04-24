@@ -1,4 +1,4 @@
-import clientPromise from "./lib/mongodb";
+import clientPromise from "@/app/lib/mongodb";
 import Image from "next/image";
 
 async function getConnectionStatus() {

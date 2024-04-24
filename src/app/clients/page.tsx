@@ -6,6 +6,7 @@ import { UserPlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import ClientCard from './_components/ClientCard';
 import LoadingSpinner from '../[_components]/LoadingSpinner';
+import { notFound } from 'next/navigation';
 
 export default function Page() {
   const [showClientForm, setShowClientForm] = useState(false);
@@ -20,15 +21,13 @@ export default function Page() {
     try {
       const res = await fetch(`/backend/api/Clients`, {});
 
-      if (!res.ok) {
-        throw new Error('Failed to fetch clients.');
-      }
-
       const data = await res.json();
+
+      if (!data.clients) notFound();
 
       setClients(data?.clients);
     } catch (e: any) {
-      console.log('Error loading clients ', e);
+      throw new Error('Failed to fetch clients.');
     }
 
     setTimeout(() => {
@@ -72,9 +71,7 @@ export default function Page() {
             return (
               <ClientCard
                 key={c._id}
-                _id={c._id}
-                firstName={c.firstName}
-                lastName={c.lastName}
+                client={c}
               />
             );
           })}

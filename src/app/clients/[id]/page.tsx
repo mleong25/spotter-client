@@ -1,57 +1,36 @@
 'use client';
 
 import ClientDisplay from '../_components/ClientDisplay';
-import { TrashIcon } from '@heroicons/react/24/outline';
-import { useRouter } from 'next/navigation';
+import { notFound } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-const getClientById = async (id: any) => {
-  const res = await fetch(
-    `/backend/api/Clients/${id}`,
-    {
-      cache: 'no-store',
+const ClientPage = ({ params }: any) => {
+  const [client, setClient] = useState({});
+
+  useEffect(() => {
+    getClients();
+  }, []);
+
+  const getClients = async () => {
+    try {
+      const res = await fetch(`/backend/api/Clients/${params.id}`, {
+        cache: 'no-store',
+      });
+
+      const data = await res.json();
+
+      if (!data.client) notFound();
+
+      setClient(data?.client);
+
+    } catch (e: any) {
+      throw new Error('Failed to fetch clients.');
     }
-  );
-
-  if (!res.ok) {
-    throw new Error('Failed to get client.');
-  }
-
-  return res.json();
-};
-
-const deleteClient = async (id: any) => {
-  const res = await fetch(
-    `/backend/api/Clients/${id}`,
-    {
-      method: 'DELETE',
-    }
-  );
-  return res;
-};
-
-const ClientPage = async ({ params }: any) => {
-  const router = useRouter();
-
-  const { client } = await getClientById(params.id);
-
-  const handleDelete = async () => {
-    const res = await deleteClient(params.id);
-
-    if (res.ok) {
-      router.replace('/clients');
-    }
-  }
+  };
 
   return (
     <>
-      <div className='flex flex-row justify-between'>
-        <ClientDisplay client={client} />
-        <TrashIcon
-          className='size-6 text-red-500 cursor-pointer'
-          onClick={handleDelete}
-        />
-      </div>
-      <div className='flex justify-center container mt-5'>Campaign</div>
+      <ClientDisplay client={client} id={params.id} />
     </>
   );
 };
