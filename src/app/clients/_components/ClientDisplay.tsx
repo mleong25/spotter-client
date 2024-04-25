@@ -1,8 +1,8 @@
 'use client';
-
-import { TrashIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import Link from 'next/link';
 
 const ClientDisplay = (props: any) => {
   const router = useRouter();
@@ -43,10 +43,15 @@ const ClientDisplay = (props: any) => {
               </div>
               <div>Weight: {props.client.weight}lbs</div>
             </div>
-            <TrashIcon
-              className='size-6 text-red-500 cursor-pointer'
-              onClick={deleteClient}
-            />
+            <div className='flex gap-2'>
+              <TrashIcon
+                className='size-6 text-red-500 cursor-pointer'
+                onClick={deleteClient}
+              />
+              <Link href={`/clients/${props.client?._id}/campaigns/new`} className='contents'>
+                <PlusIcon className='size-6 cursor-pointer' />
+              </Link>
+            </div>
           </div>
           <div className='flex justify-center container mt-5'>Campaign</div>
         </div>
