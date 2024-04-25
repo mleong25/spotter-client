@@ -6,6 +6,9 @@ import { XMarkIcon } from '@heroicons/react/24/solid';
 
 const ClientForm = (props: any) => {
   const router = useRouter();
+  const [error, setError] = useState(false);
+
+  if (error) throw new Error('Error creating client.');
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -32,9 +35,9 @@ const ClientForm = (props: any) => {
       'Content-Type': 'application/json',
     });
 
-    if (!res.ok) {
-      throw new Error('Failed to create Client.');
-    }
+
+    if (!res.ok) setError(true);
+
     const data = await res.json();
     const newClient = data?.client;
 

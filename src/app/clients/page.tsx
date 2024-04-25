@@ -10,29 +10,40 @@ import { notFound } from 'next/navigation';
 
 export default function Page() {
   const [showClientForm, setShowClientForm] = useState(false);
-  const [clients, setClients] = useState([Object]);
+  const [clients, setClients] = useState<any>([]);
   const [loading, setLoading] = useState(true);
+  const [, setError] = useState();
 
   useEffect(() => {
-    getClients();
+    const load = async () => {
+      try {
+        await getClients();
+      } catch (e: any) {
+        setError(() => {
+          throw new Error(e);
+        })
+      }
+    }
+
+    load();
   }, []);
 
   const getClients = async () => {
-    try {
-      const res = await fetch(`/backend/api/Clients`, {});
-
-      const data = await res.json();
-
-      if (!data.clients) notFound();
-
-      setClients(data?.clients);
-    } catch (e: any) {
-      throw new Error('Failed to fetch clients.');
-    }
+    const res = await fetch(`/backend/api/Clients`, {});
 
     setTimeout(() => {
       setLoading(false);
     }, 200);
+
+    if (!res.ok) {
+      throw new Error('Error fetching clients.');
+    }
+
+    const data = await res.json();
+
+    if (!data.clients) notFound();
+
+    setClients(data?.clients);
   };
 
   const triggerClientForm = () => {
@@ -68,12 +79,7 @@ export default function Page() {
       {clients.length && !loading && (
         <div className='inline-grid auto-rows-max grid-cols-1 my-6 container m-auto size-full gap-x-4 gap-y-5 md:grid-cols-3 lg:grid-cols-4'>
           {clients.map((c: any) => {
-            return (
-              <ClientCard
-                key={c._id}
-                client={c}
-              />
-            );
+            return <ClientCard key={c._id} client={c} />;
           })}
         </div>
       )}

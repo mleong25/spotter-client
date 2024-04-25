@@ -12,20 +12,17 @@ const ClientPage = ({ params }: any) => {
   }, []);
 
   const getClients = async () => {
-    try {
-      const res = await fetch(`/backend/api/Clients/${params.id}`, {
-        cache: 'no-store',
-      });
+    const res = await fetch(`/backend/api/Clients/${params.id}`, {
+      cache: 'no-store',
+    });
 
-      const data = await res.json();
+    if (!res.ok) throw new Error('Failed to fetch clients.');
 
-      if (!data.client) notFound();
+    const data = await res.json();
 
-      setClient(data?.client);
+    if (!data.client) notFound();
 
-    } catch (e: any) {
-      throw new Error('Failed to fetch clients.');
-    }
+    setClient(data?.client);
   };
 
   return (
