@@ -3,7 +3,7 @@ import mongoose, { Schema } from 'mongoose';
 mongoose.connect(process.env.MONGODB_URI || '');
 mongoose.Promise = global.Promise;
 
-const clientSchema = new Schema(
+const userSchema = new Schema(
   {
     firstName: String,
     lastName: String,
@@ -14,12 +14,17 @@ const clientSchema = new Schema(
       in: Number,
     },
     weight: Number,
+    role: {
+      type: String,
+      enum: ['user', 'client', 'athlete', 'coach'],
+      default: 'user',
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const Client = mongoose.models.Client || mongoose.model('Client', clientSchema);
+const User = mongoose.models.User || mongoose.model('User', userSchema);
 
-export default Client;
+export default User;

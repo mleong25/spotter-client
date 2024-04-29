@@ -1,9 +1,9 @@
-import Client from '@/app/backend/models/Client';
+import User from '@/app/backend/models/User';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const clients = await Client.find();
+    const clients = await User.find({ role: 'client' });
 
     return NextResponse.json({ clients }, { status: 200 });
   } catch (e: any) {
@@ -16,7 +16,11 @@ export async function POST(req: any) {
     const body = await req.json();
     const clientData = body.clientFormData;
 
-    const client = await Client.create(clientData);
+    if (clientData.role !== 'client') {
+      clientData.role = 'client';
+    }
+
+    const client = await User.create(clientData);
 
     return NextResponse.json(
       { message: 'Client Created', client: client },

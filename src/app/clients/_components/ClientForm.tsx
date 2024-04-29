@@ -62,6 +62,7 @@ const ClientForm = (props: any) => {
       in: 0,
     },
     weight: 0,
+    role: 'client',
   };
 
   const [clientFormData, setClientFormData] = useState(clientData);

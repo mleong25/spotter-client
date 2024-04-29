@@ -1,11 +1,11 @@
-import Client from '@/app/backend/models/Client';
+import User from '@/app/backend/models/User';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: any, { params }: any) {
   try {
     const { id } = params;
 
-    const client = await Client.findOne({ _id: id });
+    const client = await User.findOne({ _id: id });
 
     return NextResponse.json({ client }, { status: 200 });
   } catch (e) {
@@ -16,7 +16,7 @@ export async function GET(req: any, { params }: any) {
 export async function DELETE(req: any, { params }: any) {
   try {
     const { id } = params;
-    await Client.findByIdAndDelete(id);
+    await User.findByIdAndDelete(id);
 
     return NextResponse.json({ message: 'Client Deleted' }, { status: 200 });
   } catch (e) {
