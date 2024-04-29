@@ -1,12 +1,15 @@
 'use client';
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import LoadingSpinner from '@/app/[_components]/LoadingSpinner';
+import CreateCampaign from './CreateCampaign';
 
 const ClientDisplay = (props: any) => {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [showCampaignForm, setCampaignForm] = useState(false);
 
   if (error) throw new Error('Error deleting client.');
 
@@ -24,9 +27,21 @@ const ClientDisplay = (props: any) => {
     return new Date(date).toLocaleDateString();
   };
 
+  const closeCampaignForm = () => {
+    setCampaignForm(false);
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 200);
+  }, []);
+
   return (
     <>
-      {props.client && (
+      {loading && <LoadingSpinner desc={'Client'} />}
+
+      {!loading && props.client && !showCampaignForm && (
         <div className='flex flex-col'>
           <div className='flex flex-row justify-between'>
             <div className='flex flex-col gap-3'>
@@ -48,13 +63,20 @@ const ClientDisplay = (props: any) => {
                 className='size-6 text-red-500 cursor-pointer'
                 onClick={deleteClient}
               />
-              <Link href={`/clients/${props.client?._id}/campaigns/new`} className='contents'>
-                <PlusIcon className='size-6 cursor-pointer' />
-              </Link>
+              <PlusIcon
+                className='size-6 cursor-pointer'
+                onClick={() => {
+                  setCampaignForm(true);
+                }}
+              />
             </div>
           </div>
           <div className='flex justify-center container mt-5'>Campaign</div>
         </div>
+      )}
+
+      {!loading && props.client && showCampaignForm && (
+        <CreateCampaign client={props.client} onCloseForm={closeCampaignForm} />
       )}
     </>
   );
