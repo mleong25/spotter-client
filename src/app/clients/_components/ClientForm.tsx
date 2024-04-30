@@ -35,7 +35,6 @@ const ClientForm = (props: any) => {
       'Content-Type': 'application/json',
     });
 
-
     if (!res.ok) setError(true);
 
     const data = await res.json();
@@ -76,7 +75,7 @@ const ClientForm = (props: any) => {
         ></XMarkIcon>
         <h2 className='block font-medium text-lg m-auto py-6'>Client Form</h2>
         <form className='flex flex-col' method='post' onSubmit={handleSubmit}>
-          <label className='w-full flex justify-between items-center'>
+          <label>
             First Name
             <input
               id='firstName'
@@ -87,7 +86,7 @@ const ClientForm = (props: any) => {
               value={clientFormData.firstName}
             />
           </label>
-          <label className='w-full flex justify-between items-center'>
+          <label>
             Last Name
             <input
               id='lastName'
@@ -98,7 +97,7 @@ const ClientForm = (props: any) => {
               value={clientFormData.lastName}
             />
           </label>
-          <label className='w-full flex justify-between items-center'>
+          <label>
             Email
             <input
               id='email'
@@ -109,7 +108,7 @@ const ClientForm = (props: any) => {
               value={clientFormData.email}
             />
           </label>
-          <label className='w-full flex justify-between items-center'>
+          <label>
             DOB
             <input
               id='dob'
@@ -121,7 +120,7 @@ const ClientForm = (props: any) => {
               className='w-[195px]'
             />
           </label>
-          <label className='w-full flex justify-between items-center'>
+          <label>
             Height
             <div className='flex justify-end items-baseline gap-2 w-[195px] m-1'>
               <div className='relative flex justify-end w-1/2'>
@@ -159,7 +158,7 @@ const ClientForm = (props: any) => {
               </div>
             </div>
           </label>
-          <label className='w-full flex justify-between items-center'>
+          <label>
             Weight
             <div className='relative flex justify-end'>
               <input

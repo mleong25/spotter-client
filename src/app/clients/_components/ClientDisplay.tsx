@@ -34,7 +34,7 @@ const ClientDisplay = (props: any) => {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 200);
+    }, 300);
   }, []);
 
   return (

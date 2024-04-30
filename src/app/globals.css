@@ -1,6 +1,15 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@layer tailwind-base, primereact, tailwind-utilities;
+
+@layer tailwind-base {
+  @tailwind base;
+}
+
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
+}
+
+@import 'primereact/resources/themes/arya-blue/theme.css' layer(primereact);
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -28,12 +37,15 @@ body {
 
 @layer base {
   label {
-    @apply mt-4
+    @apply mt-4 w-full flex justify-between items-center;
   }
   input,
   select,
   textarea {
-    @apply m-1 rounded p-1 text-black;
+    @apply m-1 rounded p-1 text-black w-1/2;
+  }
+  input::-webkit-slider-thumb {
+    @apply bg-blue-500 appearance-none size-4 rounded-lg;
   }
 }
 
