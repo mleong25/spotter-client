@@ -1,6 +1,7 @@
 import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { AutoComplete } from 'primereact/autocomplete';
+import { Dropdown } from 'primereact/dropdown';
 import exercises from '@/app/lib/exercises.json';
 
 const CreateCampaign = (props: any) => {
@@ -8,6 +9,26 @@ const CreateCampaign = (props: any) => {
   const [selectedExercise, setSelectedExercise] = useState<any>(null);
   const [selectedExercises, setSelectedExercises] = useState<any[]>([]);
   const [filteredExercises, setFilteredExercises] = useState<any>(null);
+  const [selectedGoal, setSelctedGoal] = useState(null);
+  const [selectedSplit, setSelectedSplit] = useState(null);
+
+  const goals = [
+    { name: 'Strength Training', code: 'strength' },
+    { name: 'Cut / Weight Loss', code: 'cut' },
+    { name: 'Maintenance', code: 'maintain' },
+    { name: 'Bulk / Weight Gain', code: 'bulk' },
+    { name: 'Body Recomposition', code: 'recomp' },
+  ];
+
+  const splits = [
+    { name: 'Cardio', code: 'cardio' },
+    { name: 'Push / Pull / Legs', code: 'ppl' },
+    { name: 'Upper / Lower', code: 'upper_lower' },
+    { name: 'Body Part', code: 'body_part' },
+    { name: 'Full Body', code: 'full_body' },
+    { name: 'Powerlifting', code: 'powerlift' },
+    { name: 'Custom', code: 'custom' },
+  ];
 
   const closeForm = () => {
     props.onCloseForm();
@@ -39,10 +60,6 @@ const CreateCampaign = (props: any) => {
       setSelectedExercise(exercise);
       setSelectedExercises([...selectedExercises, selectedExercise]);
     }
-
-    // setTimeout(() => {
-    //   setSelectedExercise(null);
-    // }, 300);
   };
 
   return (
@@ -57,25 +74,23 @@ const CreateCampaign = (props: any) => {
       <div className='flex flex-col grow'>
         <label>
           Goal
-          <select defaultValue={''}>
-            <option value='' disabled>
-              Select Goal
-            </option>
-            <option value='strength'>Strength Training</option>
-            <option value='cut'>Cut / Weight Loss</option>
-            <option value='maintenance'>Maintain</option>
-            <option value='bulk'>Bulk / Weight Gain</option>
-            <option value='recomp'>Body Recomposition</option>
-          </select>
+          <Dropdown
+            value={selectedGoal}
+            onChange={(e: any) => setSelctedGoal(e.value)}
+            options={goals}
+            optionLabel='name'
+            placeholder='Select a Goal'
+            className='w-1/2'
+          />
         </label>
         <label>
           <span>
             Days to Train ({' '}
-            <span className='text-blue-400 font-semibold'>{daysTrain}x</span> /
+            <span className='text-[--primary-300] font-semibold'>{daysTrain}x</span> /
             wk )
           </span>
           <input
-            className='h-2 rounded-lg appearance-none cursor-pointer'
+            className='h-2 rounded-lg appearance-none cursor-pointer mx-1'
             type='range'
             min={1}
             max={7}
@@ -88,29 +103,25 @@ const CreateCampaign = (props: any) => {
         </label>
         <label>
           Split
-          <select defaultValue={''}>
-            <option value='' disabled>
-              Select Split
-            </option>
-            <option value='cardio'>Cardio</option>
-            <option value='ppl'>Push / Pull / Legs</option>
-            <option value='upper_lower'>Upper / Lower</option>
-            <option value='body_part'>Body Part</option>
-            <option value='full_body'>Full Body</option>
-            <option value='powerlift'>Powerlifting</option>
-            <option value='custom'>Custom</option>
-          </select>
+          <Dropdown
+            value={selectedSplit}
+            onChange={(e: any) => setSelectedSplit(e.value)}
+            options={splits}
+            optionLabel='name'
+            placeholder='Select a Split'
+            className='w-1/2'
+          />
         </label>
         <label>
           Exercises{' '}
           <AutoComplete
             field='exercise_name'
+            multiple
             value={selectedExercise}
             suggestions={filteredExercises}
             completeMethod={search}
             onChange={selectExercise}
-            className='p-component w-1/2 justify-end m-1'
-            inputClassName='w-full m-0'
+            className='p-component w-1/2 justify-end'
           />
         </label>
       </div>
