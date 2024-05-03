@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import 'primereact/resources/themes/bootstrap4-light-blue/theme.css'
 import './globals.css';
-import { PrimeReactProvider } from 'primereact/api';
-import Tailwind from 'primereact/passthrough/tailwind';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,9 +17,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <PrimeReactProvider value={{ pt: Tailwind }}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              const style = document.createElement('style')
+              style.innerHTML = '@layer tailwind-base, primereact, tailwind-utilities;'
+              style.setAttribute('type', 'text/css')
+              document.querySelector('head').prepend(style)
+            `,
+          }}
+        />
+      </head>
+      {/* <PrimeReactProvider value={{ pt: Tailwind }}> */}
         <body className={inter.className}>{children}</body>
-      </PrimeReactProvider>
+      {/* </PrimeReactProvider> */}
     </html>
   );
 }
