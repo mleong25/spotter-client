@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import 'primereact/resources/themes/bootstrap4-light-blue/theme.css'
 import './globals.css';
+import 'primeicons/primeicons.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -29,9 +30,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      {/* <PrimeReactProvider value={{ pt: Tailwind }}> */}
-        <body className={inter.className}>{children}</body>
-      {/* </PrimeReactProvider> */}
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

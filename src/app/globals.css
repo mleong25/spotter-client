@@ -43,7 +43,7 @@ body {
     @apply m-1 rounded p-1 text-black w-1/2;
   }
   input::-webkit-slider-thumb {
-    @apply bg-[--primary-400] appearance-none size-4 rounded-lg;
+    @apply bg-[--primary-500] appearance-none size-4 rounded-lg;
   }
 }
 
