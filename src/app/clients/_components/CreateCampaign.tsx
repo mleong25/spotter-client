@@ -1,14 +1,13 @@
 import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
-import { AutoComplete } from 'primereact/autocomplete';
 import { Dropdown } from 'primereact/dropdown';
+import { MultiSelect } from 'primereact/multiselect';
 import exercises from '@/app/lib/exercises.json';
+import ExerciseCounter from './ExerciseCounter';
 
 const CreateCampaign = (props: any) => {
   const [daysTrain, setDaysTrain] = useState(4);
-  const [selectedExercise, setSelectedExercise] = useState<any>(null);
   const [selectedExercises, setSelectedExercises] = useState<any[]>([]);
-  const [filteredExercises, setFilteredExercises] = useState<any>(null);
   const [selectedGoal, setSelctedGoal] = useState(null);
   const [selectedSplit, setSelectedSplit] = useState(null);
 
@@ -34,32 +33,17 @@ const CreateCampaign = (props: any) => {
     props.onCloseForm();
   };
 
-  const search = (e: any) => {
-    // Timeout to emulate a network connection
-    setTimeout(() => {
-      let _filteredExercises;
-
-      if (!e.query.trim().length) {
-        _filteredExercises = [...exercises];
-      } else {
-        _filteredExercises = exercises.filter((exercise) => {
-          return exercise.exercise_name
-            .toLowerCase()
-            .startsWith(e.query.toLowerCase());
-        });
-      }
-
-      setFilteredExercises(_filteredExercises);
-    }, 250);
+  const selectExercise = (e: any) => {
+    setSelectedExercises(e.target.value);
   };
 
-  const selectExercise = (e: any) => {
-    const exercise = e.target.value;
-
-    if (exercise) {
-      setSelectedExercise(exercise);
-      setSelectedExercises([...selectedExercises, selectedExercise]);
-    }
+  const removeExercise = (exercise: any) => {
+    const updatedExercises = selectedExercises.filter(
+      (selectedExercise: any) => {
+        return selectedExercise.exercise_name !== exercise.exercise_name;
+      }
+    );
+    setSelectedExercises(updatedExercises);
   };
 
   return (
@@ -86,8 +70,10 @@ const CreateCampaign = (props: any) => {
         <label>
           <span>
             Days to Train ({' '}
-            <span className='text-[--primary-300] font-semibold'>{daysTrain}x</span> /
-            wk )
+            <span className='text-[--primary-300] font-semibold'>
+              {daysTrain}x
+            </span>{' '}
+            / wk )
           </span>
           <input
             className='h-2 rounded-lg appearance-none cursor-pointer mx-1'
@@ -114,16 +100,31 @@ const CreateCampaign = (props: any) => {
         </label>
         <label>
           Exercises{' '}
-          <AutoComplete
-            field='exercise_name'
-            multiple
-            value={selectedExercise}
-            suggestions={filteredExercises}
-            completeMethod={search}
+          <MultiSelect
+            value={selectedExercises}
             onChange={selectExercise}
-            className='p-component w-1/2 justify-end'
+            options={exercises}
+            optionLabel='exercise_name'
+            filter
+            placeholder='Select Exercises'
+            maxSelectedLabels={2}
+            showSelectAll={false}
+            virtualScrollerOptions={{ itemSize: 30 }}
+            className='p-component w-1/2 justify-end text-[--gray-700]'
           />
         </label>
+        <div>
+          {selectedExercises.length > 0 &&
+            selectedExercises.map((exercise: any, i) => {
+              return (
+                <ExerciseCounter
+                  key={i}
+                  exercise={exercise}
+                  onRemoveExercise={(e: any) => removeExercise(exercise)}
+                />
+              );
+            })}
+        </div>
       </div>
       <div className='flex justify-evenly place-items-end w-full gap-6'>
         <button
