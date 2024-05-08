@@ -13,13 +13,11 @@ const ExerciseCounter = (props: any) => {
 
   return (
     <div className='flex justify-between items-center mt-4 w-full'>
-      <div className='flex'>
-        <XMarkIcon
-          className='w-6 text-[--red-500]'
-          onClick={() => {
-            props.onRemoveExercise();
-          }}
-        />
+      <div className='flex w-1/2 items-center'>
+        <i
+          className='pi pi-trash text-[--red-500] text-base cursor-pointer px-2'
+          onClick={() => props.onRemoveExercise()}
+        ></i>
         {exercise.exercise_name}
       </div>
       <div className='flex w-1/2 items-center gap-2'>
@@ -37,7 +35,6 @@ const ExerciseCounter = (props: any) => {
             decrementButtonIcon='pi pi-minus'
             inputStyle={{ textAlign: 'center' }}
           />
-          Sets
         </div>
         <div className='flex flex-col text-center'>
           <InputNumber
@@ -53,7 +50,6 @@ const ExerciseCounter = (props: any) => {
             decrementButtonIcon='pi pi-minus'
             inputStyle={{ textAlign: 'center' }}
           />
-          Reps
         </div>
       </div>
     </div>

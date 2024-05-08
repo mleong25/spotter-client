@@ -47,7 +47,7 @@ const CreateCampaign = (props: any) => {
   };
 
   return (
-    <div className='flex flex-col h-full'>
+    <div className='flex flex-col h-full relative overflow-auto'>
       <div className='flex baseline items-center gap-2'>
         <ArrowLeftCircleIcon
           className='w-10 p-1 cursor-pointer'
@@ -113,20 +113,27 @@ const CreateCampaign = (props: any) => {
             className='p-component w-1/2 justify-end text-[--gray-700]'
           />
         </label>
-        <div>
-          {selectedExercises.length > 0 &&
-            selectedExercises.map((exercise: any, i) => {
-              return (
-                <ExerciseCounter
-                  key={i}
-                  exercise={exercise}
-                  onRemoveExercise={(e: any) => removeExercise(exercise)}
-                />
-              );
-            })}
-        </div>
+        {selectedExercises.length > 0 ? (
+          <>
+            <div className='flex w-1/2 justify-around self-end mt-3'>
+              <div>Sets</div>
+              <div>Reps</div>
+            </div>
+            <div className=''>
+              {selectedExercises.map((exercise: any, i) => {
+                return (
+                  <ExerciseCounter
+                    key={i}
+                    exercise={exercise}
+                    onRemoveExercise={(e: any) => removeExercise(exercise)}
+                  />
+                );
+              })}
+            </div>
+          </>
+        ) : null}
       </div>
-      <div className='flex justify-evenly place-items-end w-full gap-6'>
+      <div className='flex justify-evenly place-items-end w-full gap-6 sticky bottom-0 w-full p-4 bg-black'>
         <button
           className='flex h-[48px] w-full items-center justify-center gap-2 border rounded-lg p-3 text-sm font-medium hover:bg-red-50 hover:text-red-600'
           onClick={closeForm}
