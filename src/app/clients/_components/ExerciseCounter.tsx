@@ -1,15 +1,19 @@
-import { XMarkIcon } from '@heroicons/react/24/outline';
 import {
   InputNumber,
   InputNumberValueChangeEvent,
 } from 'primereact/inputnumber';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const ExerciseCounter = (props: any) => {
-  const [setCounter, setSetCounter] = useState<number | null | undefined>(1);
-  const [repCounter, setRepCounter] = useState<number | null | undefined>(1);
+  const [exercise, setExercise] = useState(props.exercise);
 
-  const exercise = props.exercise;
+  useEffect(() => {
+    setExercise({ ...exercise, sets: 1, reps: 1 });
+  }, []);
+
+  useEffect(() => {
+    props.onExerciseUpdate(exercise);
+  }, [exercise]);
 
   return (
     <div className='flex justify-between items-center mt-4 w-full'>
@@ -23,10 +27,10 @@ const ExerciseCounter = (props: any) => {
       <div className='flex w-1/2 items-center gap-2'>
         <div className='flex flex-col text-center'>
           <InputNumber
-            value={setCounter}
-            onValueChange={(e: InputNumberValueChangeEvent) =>
-              setSetCounter(e.value)
-            }
+            value={exercise.sets}
+            onValueChange={(e: InputNumberValueChangeEvent) => {
+              setExercise({ ...exercise, sets: e.value });
+            }}
             showButtons
             buttonLayout='horizontal'
             step={1}
@@ -38,10 +42,10 @@ const ExerciseCounter = (props: any) => {
         </div>
         <div className='flex flex-col text-center'>
           <InputNumber
-            value={repCounter}
-            onValueChange={(e: InputNumberValueChangeEvent) =>
-              setRepCounter(e.value)
-            }
+            value={exercise.reps}
+            onValueChange={(e: InputNumberValueChangeEvent) => {
+              setExercise({ ...exercise, reps: e.value });
+            }}
             showButtons
             buttonLayout='horizontal'
             step={1}

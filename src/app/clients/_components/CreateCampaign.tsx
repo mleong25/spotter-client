@@ -1,5 +1,5 @@
 import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
 import exercises from '@/app/lib/exercises.json';
@@ -43,6 +43,16 @@ const CreateCampaign = (props: any) => {
         return selectedExercise.exercise_name !== exercise.exercise_name;
       }
     );
+    setSelectedExercises(updatedExercises);
+  };
+
+  const updateExercise = (exercise: any) => {
+    const updatedExercises = selectedExercises.map((e: any) => {
+      if (e.id === exercise.id) {
+        e = exercise;
+        return e;
+      }
+    });
     setSelectedExercises(updatedExercises);
   };
 
@@ -125,7 +135,8 @@ const CreateCampaign = (props: any) => {
                   <ExerciseCounter
                     key={i}
                     exercise={exercise}
-                    onRemoveExercise={(e: any) => removeExercise(exercise)}
+                    onRemoveExercise={() => removeExercise(exercise)}
+                    onExerciseUpdate={updateExercise}
                   />
                 );
               })}
