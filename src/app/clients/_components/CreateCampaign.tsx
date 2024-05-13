@@ -1,11 +1,20 @@
 import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
 import exercises from '@/app/lib/exercises.json';
 import ExerciseCounter from './ExerciseCounter';
 
 const CreateCampaign = (props: any) => {
+  const campaignData = {
+    goal: '',
+    daysTrain: '',
+    split: '',
+    email: '',
+    exercises: [],
+  };
+
+  const [campaignFormData, setCampaignFormData] = useState(campaignData);
   const [daysTrain, setDaysTrain] = useState(4);
   const [selectedExercises, setSelectedExercises] = useState<any[]>([]);
   const [selectedGoal, setSelctedGoal] = useState(null);
