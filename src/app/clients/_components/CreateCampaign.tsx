@@ -1,24 +1,25 @@
+import ExerciseCounter from './ExerciseCounter';
+import exercises from '@/app/lib/exercises.json';
+import { useRouter } from 'next/navigation';
 import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
-import exercises from '@/app/lib/exercises.json';
-import ExerciseCounter from './ExerciseCounter';
+import { InputNumber } from 'primereact/inputnumber';
 
 const CreateCampaign = (props: any) => {
-  const campaignData = {
-    goal: '',
-    daysTrain: '',
-    split: '',
-    email: '',
-    exercises: [],
-  };
+  const router = useRouter();
 
-  const [campaignFormData, setCampaignFormData] = useState(campaignData);
-  const [daysTrain, setDaysTrain] = useState(4);
-  const [selectedExercises, setSelectedExercises] = useState<any[]>([]);
-  const [selectedGoal, setSelctedGoal] = useState(null);
-  const [selectedSplit, setSelectedSplit] = useState(null);
+  const exercisesList: any[] | undefined = [];
+
+  const campaignData = {
+    goal: { name: '', code: '' },
+    duration: 8,
+    daysTrain: 4,
+    split: { name: '', code: '' },
+    exercises: exercisesList,
+    hasStarted: false,
+  };
 
   const goals = [
     { name: 'Strength Training', code: 'strength' },
@@ -38,6 +39,12 @@ const CreateCampaign = (props: any) => {
     { name: 'Custom', code: 'custom' },
   ];
 
+  const [campaignFormData, setCampaignFormData] = useState(campaignData);
+  const [selectedExercises, setSelectedExercises] = useState<any[]>([]);
+  const [error, setError] = useState(false);
+
+  if (error) throw new Error('Error creating Campaign.');
+
   const closeForm = () => {
     props.onCloseForm();
   };
@@ -47,22 +54,61 @@ const CreateCampaign = (props: any) => {
   };
 
   const removeExercise = (exercise: any) => {
-    const updatedExercises = selectedExercises.filter(
+    const updatedCampaignExercises = campaignFormData.exercises.filter(
       (selectedExercise: any) => {
         return selectedExercise.exercise_name !== exercise.exercise_name;
       }
     );
-    setSelectedExercises(updatedExercises);
+    setCampaignFormData({
+      ...campaignFormData,
+      exercises: updatedCampaignExercises,
+    });
+
+    const updatedSelectExercises = selectedExercises.filter(
+      (selectedExercise: any) => {
+        return selectedExercise.exercise_name !== exercise.exercise_name;
+      }
+    );
+    setSelectedExercises(updatedSelectExercises);
   };
 
-  const updateExercise = (exercise: any) => {
+  const updateCampaignFormExercises = (exercise: any) => {
     const updatedExercises = selectedExercises.map((e: any) => {
-      if (e.id === exercise.id) {
-        e = exercise;
-        return e;
+      if (e?.id === exercise?.id) {
+        return exercise;
       }
+      return e;
     });
-    setSelectedExercises(updatedExercises);
+    setCampaignFormData({ ...campaignFormData, exercises: updatedExercises });
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+
+    const formattedCampaignData = {
+      ...campaignFormData,
+      goal: campaignFormData.goal.code,
+      split: campaignFormData.split.code,
+    };
+
+    const res = await fetch(`/backend/api/Campaigns`, {
+      method: 'POST',
+      body: JSON.stringify({ formattedCampaignData }),
+      //@ts-ignore
+      'Content-Type': 'application/json',
+    });
+
+    if (!res.ok) setError(true);
+
+    const data = await res.json();
+    const newCampaign = data?.campaign;
+
+    props.onCreateCampaign(newCampaign);
+
+    closeForm();
+
+    router.refresh();
+    router.push(`/clients/${props.client._id}`);
   };
 
   return (
@@ -78,8 +124,10 @@ const CreateCampaign = (props: any) => {
         <label>
           Goal
           <Dropdown
-            value={selectedGoal}
-            onChange={(e: any) => setSelctedGoal(e.value)}
+            value={campaignFormData.goal}
+            onChange={(e: any) =>
+              setCampaignFormData({ ...campaignFormData, goal: e.value })
+            }
             options={goals}
             optionLabel='name'
             placeholder='Select a Goal'
@@ -87,10 +135,22 @@ const CreateCampaign = (props: any) => {
           />
         </label>
         <label>
+          Duration (weeks)
+          <InputNumber
+            value={campaignFormData.duration}
+            onValueChange={(e: any) => {
+              setCampaignFormData({ ...campaignFormData, duration: e.value });
+            }}
+            min={1}
+            showButtons
+            className='w-1/2'
+          />
+        </label>
+        <label>
           <span>
             Days to Train ({' '}
             <span className='text-[--primary-300] font-semibold'>
-              {daysTrain}x
+              {campaignFormData.daysTrain}x
             </span>{' '}
             / wk )
           </span>
@@ -100,17 +160,22 @@ const CreateCampaign = (props: any) => {
             min={1}
             max={7}
             step={1}
-            value={daysTrain}
+            value={campaignFormData.daysTrain}
             onChange={(e: any) => {
-              setDaysTrain(e.target.value);
+              setCampaignFormData({
+                ...campaignFormData,
+                daysTrain: e.target.value,
+              });
             }}
           />
         </label>
         <label>
           Split
           <Dropdown
-            value={selectedSplit}
-            onChange={(e: any) => setSelectedSplit(e.value)}
+            value={campaignFormData.split}
+            onChange={(e: any) =>
+              setCampaignFormData({ ...campaignFormData, split: e.value })
+            }
             options={splits}
             optionLabel='name'
             placeholder='Select a Split'
@@ -118,7 +183,7 @@ const CreateCampaign = (props: any) => {
           />
         </label>
         <label>
-          Exercises{' '}
+          Exercises
           <MultiSelect
             value={selectedExercises}
             onChange={selectExercise}
@@ -138,14 +203,14 @@ const CreateCampaign = (props: any) => {
               <div>Sets</div>
               <div>Reps</div>
             </div>
-            <div className=''>
+            <div>
               {selectedExercises.map((exercise: any, i) => {
                 return (
                   <ExerciseCounter
                     key={i}
                     exercise={exercise}
                     onRemoveExercise={() => removeExercise(exercise)}
-                    onExerciseUpdate={updateExercise}
+                    onExerciseUpdate={updateCampaignFormExercises}
                   />
                 );
               })}
@@ -162,7 +227,7 @@ const CreateCampaign = (props: any) => {
         </button>
         <button
           className='flex h-[48px] w-full items-center justify-center gap-2 border rounded-lg p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600'
-          onClick={closeForm}
+          onClick={handleSubmit}
         >
           Save
         </button>
