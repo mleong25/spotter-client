@@ -24,7 +24,6 @@ export const ClientsProvider = ({ children }: any) => {
   const [clients, setClients] = useState<any[]>();
 
   const getClientById = (id: string) => {
-    console.log(clients, id);
     return clients?.filter((c) => c._id === id)[0];
   };
 
