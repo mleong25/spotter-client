@@ -1,9 +1,7 @@
 import SideNav from '@/app/ui/sidenav';
-import { ClientsProvider } from '@/contexts/clients';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <ClientsProvider>
       <div className='flex h-screen flex-col md:flex-row md:overflow-hidden'>
         <div className='w-full flex-none md:w-64'>
           <SideNav />
@@ -12,6 +10,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           {children}
         </div>
       </div>
-    </ClientsProvider>
   );
 }

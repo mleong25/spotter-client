@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import 'primereact/resources/themes/bootstrap4-light-blue/theme.css';
 import './globals.css';
 import 'primeicons/primeicons.css';
+import { ClientsProvider } from '@/contexts/clients';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -30,7 +31,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={inter.className}>{children}</body>
+      <ClientsProvider>
+        <body className={inter.className}>{children}</body>
+      </ClientsProvider>
     </html>
   );
 }
