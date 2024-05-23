@@ -58,8 +58,7 @@ export default function Page() {
 
   return (
     <>
-      <div className='flex flex-row justify-between'>
-        <div>Client Page</div>
+      <div className='flex flex-row justify-end'>
         {!showClientForm && (
           <UserPlusIcon
             onClick={triggerClientForm}
