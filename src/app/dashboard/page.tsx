@@ -55,8 +55,8 @@ export default function Page() {
             <div className='text-4xl'>{clients ? clients.length : 0}</div>
           </Link>
           <Link
-            className='border rounded-md p-6 w-fit h-fit cursor-pointer hover:border-[--primary-500]'
-            href='/'
+            className='border grow rounded-md p-6 w-fit h-fit cursor-pointer hover:border-[--primary-500]'
+            href='/dashboard'
           >
             Today
             <div className='text-3xl'>Training {clients && clients[0].firstName} @ 12:00PM</div>
@@ -65,7 +65,7 @@ export default function Page() {
           </Link>
           <Link
             className='grow border rounded-md p-6 cursor-pointer hover:border-[--primary-500]'
-            href='/'
+            href='/dashboard'
           >
             Schedule
             <div className='text-2xl'>Sunday</div>
